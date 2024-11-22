@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Search</title>
+    <!-- Link to styles.css in the static folder -->
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}"> -->
+ 
+    <style>
+        /* === BEFORE SEARCH === */
+
+/* General Body and Background Styles */
+body {
+    background-image: url('AFJ_Dinner_Plate_1920x1080_W.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Background blur effect */
+.background-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('static/AFJ_Dinner_Plate_1920x1080_W.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    opacity: 0.5;
+    z-index: -1;
+}
+
+/* Title Section */
+h1 {
+    text-align: center;
+    color: #000000;
+    margin-top: 70px;
+    margin-bottom: 10px;
+    font-size: 40px;
+}
+
+/* Form Elements */
+label {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* label#sort
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+
+input[type="text"],
+select {
+    font-size: 1rem;
+    padding: 0.5em 1em;
+    line-height: 1.5;
+    border: 2px solid #8D6E63;
+    border-radius: 8px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+select#search_type{
+    margin-left: 45px;
+    height: 45px;
+    width: 300px;
+}
+input[type="text"] {
+    width: 300px;
+    height: 45px;
+}
+input#sort_by_rating{
+    width: 45px;
+    height: 45px;
+    border-radius: 100px;
+    margin-left: 140px;
+}
+#search_type,
+#search_text,
+label,
+button {
+    margin-left: 20px;
+}
+div.left, div.right
+{
+    width: 50%;
+}
+
+
+/* Checkbox Styling */
+/* input[type="checkbox"] {
+    height: 45px;
+    margin-left: 10px;
+    appearance: none;
+    background-color: #FF7043;
+    border: 4px solid #FF7043;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #FF7043;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 9px;
+    width: 8px;
+    height: 19px;
+    border: solid #fff;
+    border-width: 0 5px 5px 0;
+    transform: rotate(45deg);
+} */
+form#searchform{
+    row-gap: 20px;
+}
+
+.first, .second, .third, .fourth{
+    margin-left: 200px;
+    margin-top: 20px;
+}
+.third{
+    margin-left: 200px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+/* Button Styles */
+button {
+    background-color: #5f1616;
+    color: #FFF8E1;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 480px;
+}
+
+/* Navigation Bar */
+
+nav.col_container {
+    position: relative;
+    top: 300px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    z-index: 1000;
+    box-shadow: 0 20px 20px rgba(0.2, 0, 0, 0.2);
+
+}
+
+/* Sticky Navigation (After Search) */
+
+
+/* === AFTER SEARCH === */
+
+nav.fixed {
+    margin-top: 200px;
+    margin-left: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    z-index: 1000;
+    /* background-color: #FFF8E1; */
+    display: flex;
+    flex-direction: column;
+    box-shadow: none;
+}
+
+/* Results Section */
+#results {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 900px;
+    margin-left: 950px;
+}
+
+
+/* === RESULTS === */
+/* Individual Restaurant Cards */
+.restaurant {
+    background-color: #5f1616;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #1d1d1d;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
+    overflow: hidden;
+    border: 2px solid #400b0b;
+}
+
+/* Restaurant Card Content */
+.restaurant h2 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.restaurant p {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 5px 0;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.restaurant img {
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    align-self: center;
+    object-fit: cover;
+    object-position: center;
+}
+
+</style>
+        
+
+</head>
+
+<body>
+
+    <nav class="col_container">
+
+        <div class="left">
+            <h1>Restaurant Search</h1>
+        </div>
+
+        <div class="right">
+            <form id="searchForm">
+                <div class="first">
+                    <label for="search_type">Search By:</label>
+                    <select id="search_type" name="search_type">
+                        <option value="name">Name</option>
+                        <option value="food_type">Food Type</option>
+                        <option value="tags">Tags</option>
+                        <option value="description">Description</option>
+                    </select>
+                </div>
+
+                <div class="second">
+                    <label for="search_text">Search Term:</label>
+                    <input type="text" id="search_text" name="search_text" required>
+                </div>
+
+                <div class="third">
+                    <label id="sort">Sort by Rating</label>
+                    <input type="checkbox" id="sort_by_rating" name="sort_by_rating">
+                </div>
+                <div class="fourth">
+                    <button type="submit" >Search</button>
+                </div>
+            </form>
+        </div>
+    </nav>
+
+    <div id="results"></div>
+
+</body>
+    <script>
+        document.getElementById("searchForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+
+            const nav = document.querySelector("nav");
+            nav.classList.add("fixed"); // Add the 'fixed' class to move the nav to the top
+            const searchType = document.getElementById("search_type").value;
+            const searchText = document.getElementById("search_text").value;
+            const sortByRating = document.getElementById("sort_by_rating").checked;
+
+            fetch("/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ search_type: searchType, search_text: searchText, sort_by_rating: sortByRating })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Data:", data);
+                    const resultsDiv = document.getElementById("results");
+                    resultsDiv.innerHTML = "";
+
+                    if (data.message) {
+                        resultsDiv.innerHTML = `<p>${data.message}</p>`;
+                    } else {
+                        data.forEach(restaurant => {
+                            const restaurantDiv = document.createElement("div");
+                            restaurantDiv.classList.add("restaurant");
+
+                            restaurantDiv.innerHTML = `
+                            <h2>${restaurant.name}</h2>
+                            <p>Food Type: ${restaurant.food_type}</p>
+                            <p>Overall Price: ${restaurant.overall_price}</p>
+                            <p>Overall Rating: ${restaurant.overall_rating}</p>
+                            <p>Tags: ${restaurant.tags.join(", ")}</p>
+                            <p>Description: ${restaurant.description}</p>
+                            <p>Address: ${restaurant.address}</p>
+                            <br>
+                            <img src="${restaurant.image_url}" alt="${restaurant.name}" />
+                        `;
+
+                            resultsDiv.appendChild(restaurantDiv);
+
+
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+
+
+
+</html>
